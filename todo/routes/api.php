@@ -14,4 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('items', [App\Http\Controllers\TodoController::class, 'index_api']);
 

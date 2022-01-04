@@ -4,14 +4,15 @@
         <div class="alert alert-danger hidden" id="failure"></div>
 
         <div class="col-md-6 align-self-center">
-            <ul class="list-group" style="width: 500px; margin: 0 auto;">
-                <li class="list-group-item" v-model="itemsModel" v-if="items" v-for="item in items" :key="item.id">
-                    <a @click="details(item.id)" style="color: cornflowerblue">{{item.title}}</a>
+            <ul class="list-group">
+                <li class="list-group-item" v-model="itemsModel" v-if="items" v-for="item in items.data" :key="item.id">
+                    <a @click="details(item.id)" class="details-link">{{item.title}}</a>
                     <span class="float-end">{{item.due_date}}</span>
                 </li>
             </ul>
+            <pagination v-if="items" :data="items" @pagination-change-page="getResults"></pagination>
             <div class="col-md-12 text-center">
-                <button class="btn-default btn btn-primary mt-2" @click="update" id="update">Refresh List</button>
+                <button class="btn-default btn btn-primary mt-2" @click="getResults" id="update">Refresh List</button>
                 <button class="btn-default btn btn-primary mt-2" @click="create">Create New Item</button>
             </div>
         </div>
@@ -20,7 +21,7 @@
                 <h2 v-if="detailsView">{{ detailsView.title}}</h2>
                 <div>
                     <span class="details-date" v-if="detailsView"><b>Due Date: </b>{{ detailsView.due_date}}</span>
-                    <span v-if="detailsView">{{ detailsView.content}}</span>
+                    <span v-if="detailsView" class="details-content">{{ detailsView.content}}</span>
                 </div>
             </div>
             <div id="create">
@@ -52,21 +53,21 @@
         data() {
             return {
                 itemsModel: 0,
-                items: null,
+                items: '',
                 detailsView: null,
                 csrf: document.head.querySelector('meta[name="csrf-token"]').content
             };
         },
         mounted () {
-            axios.get("/api/items").then(response => (this.items = response.data));
+            if (typeof page === "undefined") {
+                var page = 1;
+            }
+            axios.get("/api/items?page=" + page).then(response => (this.items = response.data));
             setInterval(function() {
-                axios.get("/api/items").then(response => (this.items = response.data));
+                axios.get("/api/items?page=" + page).then(response => (this.items = response.data));
             },15000);
         },
         methods: {
-            update() {
-                axios.get("/api/items").then(response => (this.items = response.data));
-            },
             details(itemId) {
                 $('#create').hide();
                 $('#details').show();
@@ -111,6 +112,13 @@
                 $('#succes').click(function() {
                     $('#success').hide();
                 });
+            },
+            getResults(page) {
+                if (typeof page === 'undefined') {
+                    page = 1;
+                }
+
+                axios.get("/api/items?page=" + page).then(response => (this.items = response.data));
             }
         }
     }

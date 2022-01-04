@@ -26,8 +26,11 @@ Route::get('/delete/{todo}', [App\Http\Controllers\TodoController::class, 'delet
 Route::post('/store', [App\Http\Controllers\TodoController::class, 'store'])->name('store');
 
 Route::prefix('api')->middleware('auth')->group(function () {
-    Route::get('items', [App\Http\Controllers\TodoController::class, 'index_api']);
+    //Route::get('items', [App\Http\Controllers\TodoController::class, 'index_api']);
     Route::get('item/{todo}', [App\Http\Controllers\TodoController::class, 'details_api']);
     Route::post('store', [App\Http\Controllers\TodoController::class, 'store_api']);
     Route::put('/delete/{todo}', [App\Http\Controllers\TodoController::class, 'delete_api']);
 });
+
+
+

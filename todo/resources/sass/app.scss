@@ -6,3 +6,10 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+body { font-family: 'Nunito', sans-serif; }
+.hidden { display: none; }
+.details-link { cursor: pointer; }
+.details-content { min-height: 300px; padding-left: 10px; margin: 0 auto; display: block; font-family: 'Reenie Beanie'; font-size: 50px; background-color: #FFFF88; }
+.details-date { text-align: center; }
+h2 { font-weight: 800; font-family: impact; text-align: center; }

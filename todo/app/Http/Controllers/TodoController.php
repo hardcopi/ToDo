@@ -14,7 +14,8 @@ class TodoController extends Controller
     }
 
     public function index_api(){
-        $todo = Todo::where("user_id", Auth::id())->orderBy('created_at', 'asc')->get();
+        //$todo = Todo::where("user_id", Auth::id())->orderBy('created_at', 'asc')->get();
+        $todo = Todo::paginate(10);
         return $todo;
     }
 
